@@ -1,0 +1,159 @@
+% !TeX spellcheck = russian-aot-ieyo
+% Зачем: Определяет класс документа (То, как будет выглядеть документ)
+% Примечание: параметр draft помечает строки, вышедшие за границы страницы, прямоугольником, в фильной версии его нужно удалить.
+
+\ProvidesPackage{reportStyle}
+
+\usepackage{xltxtra}
+\usepackage{xunicode}
+
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setmainlanguage[babelshorthands=true]{russian}
+\setotherlanguage{english}
+
+\defaultfontfeatures{Ligatures=TeX,Renderer=Basic}
+\setmainfont{Times New Roman}
+\newfontfamily\cyrillicfonttt{Times New Roman}
+\newfontfamily\cyrillicfont{Times New Roman}
+
+\usepackage[left=2.50cm, right=1.00cm, top=2.0cm, bottom=2.0cm]{geometry}
+\usepackage[onehalfspacing]{setspace}% 1,5 интервал
+
+% Зачем: Производить арифметические операции во время компиляции TeX файла
+\usepackage{calc}
+
+% Зачем: Производить арифметические операции во время компиляции TeX файла
+\usepackage{fp}
+
+% Для включения pdf документов в результирующий файл
+\usepackage{pdfpages}
+
+% Зачем: Переносы в словах с тире.
+% Тире в словае заменяем на \hyph: аппаратно\hyphпрограммный.
+% https://stackoverflow.com/questions/2193307/how-to-get-latex-to-hyphenate-a-word-that-contains-a-dash#
+\def\hyph{-\penalty0\hskip0pt\relax}
+
+% Настройка колонтитулов
+\usepackage{fancyhdr}
+
+\usepackage{lastpage}
+
+\usepackage{enumitem}
+\setlist{nolistsep, itemsep=0.0cm}
+\setlist[itemize,0]{itemindent=\parindent + 2.2ex,leftmargin=0ex,label=--}
+\setlist[enumerate,1]{itemindent=\parindent + 2.7ex,leftmargin=0ex}
+\setlist[enumerate,2]{itemindent=\parindent + \parindent - 2.7ex}
+
+\usepackage{multicol}
+\usepackage{lipsum}
+
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{verbatim}
+
+ % Отступ в первом абзаце.
+\usepackage{indentfirst}
+
+\usepackage{xcolor}
+\usepackage{noto}
+
+% Гиперссылки
+\usepackage{hyperref}
+\definecolor{linkcolor}{HTML}{799B03} 	% цвет ссылок
+\definecolor{urlcolor}{HTML}{799B03} 	% цвет гиперссылок
+\hypersetup{pdfstartview=FitH,  linkcolor=linkcolor,urlcolor=urlcolor, colorlinks=true}
+
+% Список сокращений
+\usepackage[withpage]{acronym}
+
+% Настройка изображений в документе
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg,.eps}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\graphicspath{ {./img/} }
+
+% Зачем: Задание подписей, разделителя и нумерации частей рисунков
+% Почему: Пункт 2.5.5 Требований по оформлению пояснительной записки.
+\DeclareCaptionLabelFormat{stbfigure}{Рисунок #2}
+\DeclareCaptionLabelFormat{stbtable}{Таблица #2}
+\DeclareCaptionLabelSeparator{stb}{~--~}
+\captionsetup{labelsep=stb}
+\captionsetup[figure]{labelformat=stbfigure,justification=centering}
+\captionsetup[table]{labelformat=stbtable,justification=raggedright}
+\renewcommand{\thesubfigure}{\asbuk{subfigure}}
+
+\sloppy
+
+% Зачем: Настраивает отступ между таблицей с содержанимем и словом СОДЕРЖАНИЕ
+% Почему: Пункт 2.2.7 Требований по оформлению пояснительной записки.
+\usepackage{tocloft}
+\setlength{\cftbeforetoctitleskip}{-1em}
+\setlength{\cftaftertoctitleskip}{1em}
+
+% Зачем: Определяет отступы слева для записей в таблице содержания.
+% Почему: Пункт 2.2.7 Требований по оформлению пояснительной записки.
+\makeatletter
+\renewcommand{\l@section}{\@dottedtocline{1}{0.5em}{1.2em}}
+\renewcommand{\l@subsection}{\@dottedtocline{2}{1.7em}{2.0em}}
+\makeatother
+
+% Зачем: для оформления введения и заключения, они должны быть выровнены по центру.
+% Почему: Пункты 1.1.15 и 1.1.11 Требований по оформлению пояснительной записки.
+\makeatletter
+\newcommand\sectioncentered{%
+	\clearpage\@startsection {section}{1}%
+	{\z@}%
+	{-1em \@plus -1ex \@minus -.2ex}%
+	{1em \@plus .2ex}%
+	{\centering\hyphenpenalty=10000\normalfont\large\bfseries\MakeUppercase}%
+}
+\makeatother
+
+% Моноширинный шрифт выглядит визуально больше, чем пропорциональный шрифт, если их размеры одинаковы. Искусственно уменьшаем размер ссылок.
+\renewcommand{\UrlFont}{\small\rmfamily\tt}
+
+% Зачем: Добавляет скобку 1) к номеру сноски
+% Почему: Пункты 2.9.2 и 2.9.1 Требований по оформлению пояснительной записки.
+\makeatletter 
+\def\@makefnmark{\hbox{\@textsuperscript{\normalfont\@thefnmark)}}}
+\makeatother
+
+% Зачем: Расположение сносок внизу страницы
+% Почему: Пункт 2.9.2 Требований по оформлению пояснительной записки.
+\usepackage[bottom]{footmisc}
+
+% Зачем: Переопределяем стандартную нумерацию, т.к. в отчете будут только section и т.д. в терминологии TeX
+\makeatletter
+\renewcommand{\thesection}{\arabic{section}}
+\makeatother
+
+% Зачем: Пункты (в терминологии требований) в терминологии TeX subsubsection должны нумероваться
+% Почему: Пункт 2.2.3 Требований по оформлению пояснительной записки.
+\setcounter{secnumdepth}{3}
+
+% Зачем: Определяет отступы слева для записей в таблице содержания.
+% Почему: Пункт 2.2.7 Требований по оформлению пояснительной записки.
+\makeatletter
+\renewcommand{\l@section}{\@dottedtocline{1}{0.5em}{1.2em}}
+\renewcommand{\l@subsection}{\@dottedtocline{2}{1.7em}{2.0em}}
+\makeatother
+
+% Как в подписи к рисункам поменять двоеточие на точку
+\RequirePackage{caption}
+\DeclareCaptionLabelSeparator{defffis}{ -- }
+\captionsetup{justification=centering,labelsep=defffis}
+
+% Определение команды выделения элемента графического интерфейса
+\newcommand{\guicmd}[1]{\fbox{\textbf{#1}}}
+\newcommand{\keyboard}[1]{\fbox{\textsc{#1}}}
+\newcommand{\faq}[1]{\textbf{\textit{#1}}}
+\newcommand{\connector}[1]{\scshape{#1}}
+\newcommand{\todo}[1]{\textbf{\scshape{#1}}}
+
+% Добавить раздел без нумерации, но с отображением в содержании
+\newcommand{\anonsection}[1]{\section*{#1}\addcontentsline{toc}{section}{#1}}
+
+\usepackage[ddmmyyyy]{datetime}
